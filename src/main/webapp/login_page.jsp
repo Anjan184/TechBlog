@@ -14,12 +14,15 @@
 <link href="css/mystyle.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<style>
+.banner-background{
+clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 74%, 70% 100%, 33% 78%, 0 100%, 0 0);
+}
+</style>
 </head>
 <body>
 	<%@include file="normal_navbar.jsp"%>
-	<main class="d-flex align-items-center primary-background "
-		style="height: 100vh">
+	<main class="d-flex align-items-center primary-background banner-background" style="height: 100vh" >
 		<div class="container">
 			<div class="row">
 				<div class="col-md-4 offset-md-4">

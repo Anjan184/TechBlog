@@ -1,8 +1,8 @@
-<%@page import="com.tech.blog.helper.ConnectionProvider"%>
 <%@page import="com.tech.blog.entities.Category"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.tech.blog.entities.Post"%>
+<%@page import="com.tech.blog.helper.ConnectionProvider"%>
 <%@page import="com.tech.blog.dao.PostDao"%>
-<%@page import="com.tech.blog.entities.Message"%>
 <%@page import="com.tech.blog.entities.User"%>
 <%@page errorPage="error_page.jsp"%>
 <%
@@ -11,16 +11,21 @@ if (user == null) {
 	response.sendRedirect("login_page.jsp");
 }
 %>
+<%
+int postId = Integer.parseInt(request.getParameter("post_id"));
+PostDao d = new PostDao(ConnectionProvider.getConnection());
+Post p = d.getPostByPostId(postId);
+%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
-<title>TechBlog</title>
-<!-- css -->
+<title><%=p.getpTitle()%></title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
 	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -28,15 +33,9 @@ if (user == null) {
 <link href="css/mystyle.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-.banner-background {
-	clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 84%, 70% 100%, 33% 85%, 0 100%, 0 0
-		);
-}
-</style>
-
 
 </head>
+
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark primary-background">
 		<a class="navbar-brand" href="index.jsp"><span
@@ -50,7 +49,7 @@ if (user == null) {
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="#"><span
+				<li class="nav-item active"><a class="nav-link" href="profile.jsp"><span
 						class="fa fa-bell-o"></span>Learn Code <span class="sr-only">(current)</span></a>
 				</li>
 
@@ -84,78 +83,40 @@ if (user == null) {
 			</ul>
 		</div>
 	</nav>
+	<!-- end of navbar -->
+	<!-- main content of body -->
+	<div class="container">
+		<div class="row my-4">
+			<div class="col md-8 offset md-2">
+				<div class="card">
 
-	<%
-	Message m = (Message) session.getAttribute("msg");
-	if (m != null) {
-	%>
-
-	<div class="alert <%=m.getCssClass()%>" role="alert">
-		<%=m.getContent()%>
-	</div>
-
-	<%
-	session.removeAttribute("msg");
-	}
-	%>
-
-	<!-- main body of page -->
-	<main>
-		<div class="container">
-			<div class="row mt-4">
-				<!-- first col -->
-				<div class="col-md-4">
-					<!-- categories -->
-					<div class="list-group">
-						<a href="#" onclick="getPosts(0,this)"
-							class="c-link list-group-item list-group-item-action active"> All
-							Posts </a>
-						<!-- categories -->
-						<%
-						PostDao d = new PostDao(ConnectionProvider.getConnection());
-						ArrayList<Category> list1 = d.getAllCategories();
-						for (Category cc : list1) {
-						%>
-						<a href="#" onclick="getPosts(<%=cc.getCid()%>,this)"
-							class="c-link list-group-item list-group-item-action"><%=cc.getName()%></a>
-						<%
-						}
-						%>
-					</div>
-				</div>
-
-				<!-- second col -->
-				<div class="col-md-8" id="post-container">
-					<!-- posts -->
-					<div class="container text-center" id="loader">
-						<i class="fa fa-refresh fa-4x fa-spin"></i>
-						<h3 class="mt-2">Loading...</h3>
-
+					<div class="card-header primary-background text-white">
+						<h4><%=p.getpTitle()%></h4>
 					</div>
 
-					<div class="container-fluid" id="post-container"></div>
-
-
+					<div class="card-body">
+					 <img class="card-img-top my-2" src="blog_pics/<%=p.getpPic() %>" alt="Card image cap">
+						<p><%=p.getpContent()%></p>
+						<br> <br>
+						<pre><%=p.getpCode()%></pre>
+					</div>
+					<div class="card-footer primary-background">
+						<a href="#!" class="btn btn-outline-light btn-sm"><i
+							class="fa fa-thumbs-o-up"><span>10</span></i></a> 
+							 <a
+							href="#!" class="btn btn-outline-light btn-sm"><i
+							class="fa fa-commenting-o"><span>20</span></i></a>
+					</div>
 				</div>
-
-
 			</div>
 		</div>
 
+	</div>
 
 
-	</main>
+	<!-- end of main content of body -->
 
-
-
-
-
-
-	<!-- end main body of page -->
-
-<!-- profile modal -->
-
-	<!-- Modal -->
+	<!-- profile modal -->
 	<div class="modal fade" id="profile-modal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 
@@ -397,30 +358,6 @@ if (user == null) {
 					contentType : false
 				});
 			})
-		})
-	</script>
-
-	<!-- loading post using ajax -->
-	<script>
-		function getPosts(catId,temp) {
-			$("#loader").show();
-			$("#post-container").hide();
-			$(".c-link").removeClass('active')
-			$.ajax({
-				url : "load_posts.jsp",
-				data:{cid:catId},
-				success : function(data, textstatus, jqXHR) {
-					console.log(data);
-					$("#loader").hide();
-					$('#post-container').show();
-					$('#post-container').html(data);
-					$(temp).addClass('active')
-				}
-			})
-		}
-		$(document).ready(function(e) {
-			let allPostRef=$('.c-link')[0]
-			getPosts(0,allPostRef);
 		})
 	</script>
 
