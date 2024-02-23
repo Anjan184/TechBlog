@@ -1,5 +1,5 @@
 package com.tech.blog.entities;
-
+//This is git
 public class Message {
 private String content;
 private String type;

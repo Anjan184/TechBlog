@@ -1,3 +1,4 @@
+<!--  -->
 <nav class="navbar navbar-expand-lg navbar-dark primary-background">
   <a class="navbar-brand" href="index.jsp"><span class="fa fa-asterisk"></span>TechBlog</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

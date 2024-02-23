@@ -1,3 +1,4 @@
+<!--  -->
 <%@page import="com.tech.blog.helper.ConnectionProvider"%>
 <%@page import="com.tech.blog.entities.Category"%>
 <%@page import="java.util.ArrayList"%>
@@ -32,6 +33,11 @@ if (user == null) {
 .banner-background {
 	clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 84%, 70% 100%, 33% 85%, 0 100%, 0 0
 		);
+}
+body{
+background:url(image/pexels-shonejai-1227511.jpg);
+background-size:cover;
+background-attachment:fixed;
 }
 </style>
 

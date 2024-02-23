@@ -1,3 +1,7 @@
+<!--  -->
+<%@page import="com.tech.blog.dao.LikeDao"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="com.tech.blog.dao.UserDao"%>
 <%@page import="com.tech.blog.entities.Category"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.tech.blog.entities.Post"%>
@@ -33,7 +37,37 @@ Post p = d.getPostByPostId(postId);
 <link href="css/mystyle.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.post-title {
+	font-weight: 100;
+	font-size: 30px;
+}
 
+.post-content {
+	font-weight: 100;
+	font-size: 25px;
+}
+
+.post-date {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.post-user-info {
+	font-size: 20px;
+}
+
+.row-user {
+	border: 1px solid #e2e2e2;
+	padding-top: 15px;
+}
+
+body {
+	background: url(image/pexels-shonejai-1227511.jpg);
+	background-size: cover;
+	background-attachment: fixed;
+}
+</style>
 </head>
 
 <body>
@@ -49,9 +83,9 @@ Post p = d.getPostByPostId(postId);
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="profile.jsp"><span
-						class="fa fa-bell-o"></span>Learn Code <span class="sr-only">(current)</span></a>
-				</li>
+				<li class="nav-item active"><a class="nav-link"
+					href="profile.jsp"><span class="fa fa-bell-o"></span>Learn Code
+						<span class="sr-only">(current)</span></a></li>
 
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
@@ -91,22 +125,52 @@ Post p = d.getPostByPostId(postId);
 				<div class="card">
 
 					<div class="card-header primary-background text-white">
-						<h4><%=p.getpTitle()%></h4>
+						<h4 class="post-title"><%=p.getpTitle()%></h4>
 					</div>
 
 					<div class="card-body">
-					 <img class="card-img-top my-2" src="blog_pics/<%=p.getpPic() %>" alt="Card image cap">
-						<p><%=p.getpContent()%></p>
+						<img class="card-img-top my-2" src="blog_pics/<%=p.getpPic()%>"
+							alt="Card image cap">
+						<div class="row my-3 row-user">
+							<div class="col md-8">
+								<%
+								UserDao ud = new UserDao(ConnectionProvider.getConnection());
+								%>
+								<p class="post-user-info">
+									<a href="#!"><%=ud.getUserByUserId(p.getUserId()).getName()%></a>
+									has posted:
+								</p>
+							</div>
+
+							<div class="col md-4">
+								<p class="post-date"><%=DateFormat.getDateTimeInstance().format(p.getpDate())%></p>
+							</div>
+						</div>
+
+
+						<p class="post-content"><%=p.getpContent()%></p>
 						<br> <br>
-						<pre><%=p.getpCode()%></pre>
+						<div class="post-code">
+							<pre><%=p.getpCode()%></pre>
+						</div>
 					</div>
 					<div class="card-footer primary-background">
+
+						<%
+						LikeDao ld = new LikeDao(ConnectionProvider.getConnection());
+						%>
+						<a href="#!" onclick="doLike(<%=p.getPid()%>,<%=user.getId()%>)"
+							class="btn btn-outline-light btn-sm"><i
+							class="fa fa-thumbs-o-up"><span class="like-counter"><%=ld.countLikeOnPost(p.getPid())%></span></i></a>
 						<a href="#!" class="btn btn-outline-light btn-sm"><i
-							class="fa fa-thumbs-o-up"><span>10</span></i></a> 
-							 <a
-							href="#!" class="btn btn-outline-light btn-sm"><i
-							class="fa fa-commenting-o"><span>20</span></i></a>
+							class="fa fa-commenting-o"></i></a>
 					</div>
+					<div class="card-footer">
+						<div class="fb-comments"
+							data-href="http://localhost:8080/TechBlog/show_blog_page.jsp?post_id=<%=p.getPid()%>"
+							data-width="" data-numposts="5"></div>
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -361,5 +425,6 @@ Post p = d.getPostByPostId(postId);
 		})
 	</script>
 
+	<div id="fb-root"></div>
 </body>
 </html>

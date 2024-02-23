@@ -1,5 +1,5 @@
 package com.tech.blog.dao;
-
+//This is git
 import java.sql.*;
 
 import com.tech.blog.entities.User;
@@ -81,4 +81,36 @@ public class UserDao {
 		}
 return f;
 	}
+
+	public User getUserByUserId(int userId) {
+		User user=null;
+		String q="select * from user where Id=?";
+		try {
+		PreparedStatement ps=this.con.prepareStatement(q);
+		ps.setInt(1,userId);
+		ResultSet  set=ps.executeQuery();
+		if(set.next()) {
+			user = new User();
+			// data from db
+			String name = set.getString("name");
+			// set to user object
+			user.setName(name);
+
+			user.setId(set.getInt("Id"));
+			user.setEmail(set.getString("email"));
+			user.setPassword(set.getString("password"));
+			user.setGender(set.getString("gender"));
+			user.setAbout(set.getString("about"));
+			user.setDateTime(set.getTimestamp("rdate"));
+			user.setProfile(set.getString("profile"));
+		}
+		
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return user;
+		
+	}
 }
+

@@ -1,5 +1,5 @@
 package com.tech.blog.servlets;
-
+//This is git
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

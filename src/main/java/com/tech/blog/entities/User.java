@@ -1,5 +1,5 @@
 package com.tech.blog.entities;
-
+//This is git
 import java.sql.*;
 
 public class User {

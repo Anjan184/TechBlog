@@ -1,5 +1,5 @@
 package com.tech.blog.entities;
-
+//This is git
 public class Category {
 private int cid;
 private String name;

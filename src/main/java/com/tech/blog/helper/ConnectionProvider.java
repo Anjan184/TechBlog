@@ -1,5 +1,5 @@
 package com.tech.blog.helper;
-
+//This is git
 import java.sql.*;
 import java.sql.DriverManager;
 

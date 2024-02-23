@@ -1,3 +1,4 @@
+//This is git
 package com.tech.blog.entities;
 import java.sql.*;
 public class Post {
